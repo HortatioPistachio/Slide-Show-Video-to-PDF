@@ -8,7 +8,7 @@ from frameExtractor import *
 from diffFrame import *
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
-vid = cv2.VideoCapture('hd1.mp4')
+vid = cv2.VideoCapture('slideShort.mp4')
 
 frames = frameExtractor(vid)
 
