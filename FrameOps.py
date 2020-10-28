@@ -2,42 +2,40 @@ import cv2
 import numpy
 import math
 
-class FrameOps():
-    currentFrameNum = 0
 
-    def getNextFrame(self, vid, res):
-        framesLeft = True
-        for i in range(res):
-            ret, frame = vid.read()
-            if ret == False:
-                framesLeft = False
-                break
-
+def getNextFrame(vid, res):
+    framesLeft = True
+    for i in range(res):
         ret, frame = vid.read()
         if ret == False:
             framesLeft = False
-            
-        return frame, framesLeft
+            break
 
-    def cropFrame(self, frame, type):
-        (height, width, col) = frame.shape
-        if type == "mid":
-            y1 = math.floor(height/3)
-            y2 = math.floor(2*height/3)
+    ret, frame = vid.read()
+    if ret == False:
+        framesLeft = False
+        
+    return frame, framesLeft
 
-            x1= math.floor(width/3)
-            x2 = math.floor(2*width/3)
-            
-            
-        elif type == "bottomRight":
-            y1 = math.floor(4*height/5)
-            y2 = math.floor(height)
+def cropFrame( frame, type):
+    (height, width, col) = frame.shape
+    if type == "mid":
+        y1 = math.floor(height/3)
+        y2 = math.floor(2*height/3)
 
-            x1= math.floor(4*width/5)
-            x2 = math.floor(width)
+        x1= math.floor(width/3)
+        x2 = math.floor(2*width/3)
+        
+        
+    elif type == "bottomRight":
+        y1 = math.floor(4*height/5)
+        y2 = math.floor(height)
 
-            pass
-        else:
-            raise Exception("'type' was not found, must be one of 'mid', 'bottomRight' ")
+        x1= math.floor(4*width/5)
+        x2 = math.floor(width)
 
-        return frame[y1:y2, x1:x2]
+        pass
+    else:
+        raise Exception("'type' was not found, must be one of 'mid', 'bottomRight' ")
+
+    return frame[y1:y2, x1:x2]

@@ -5,40 +5,33 @@ from PIL import Image
 
 
 #my files
-from FrameOps import *
+import FrameOps
 from diffFrame import *
+from FrameDiffTests import *
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 #init object
-frameOps = FrameOps()
+#frameOps = FrameOps()
 
 #video to survey
 vid = cv2.VideoCapture('hd1.mp4')
 
-#holds the frames before export
-frameHolder = []
 
+currentFrame, framesLeft = FrameOps.getNextFrame(vid, 20)
 
-currentFrame, framesLeft = frameOps.getNextFrame(vid, 50)
-frameHolder.append(currentFrame)
-prevCrop = frameOps.cropFrame(currentFrame, "mid")
-while framesLeft == True:
-    
-    currentFrameCrop = frameOps.cropFrame(currentFrame, "mid")
-    if (currentFrameCrop.all() != prevCrop.any()):
-        frameHolder.append(currentFrame)
-    
-    prevCrop = currentFrameCrop
-    
-    currentFrame, framesLeft = frameOps.getNextFrame(vid, 50)
+prevCrop = FrameOps.cropFrame(currentFrame, "mid")
 
-print(len(frameHolder))
+frameDiffTests = FrameDiffTest( currentFrame)
 count = 0
-for x in frameHolder:
-    cv2.imwrite("imgDump\\slide" +str(count) +".jpeg", x)
-    count = count+1
+while framesLeft == True:
+    newFrame = frameDiffTests.sumTest(currentFrame)
 
+    if(np.sum(newFrame) != 0):
+        cv2.imwrite("imgDump/slide" +str(count) +".jpeg", newFrame)
+        count = count+1
     
+    currentFrame, framesLeft = FrameOps.getNextFrame(vid, 20)
+
 #img = cv2.imread("Capture2.png")
 
 #text = pytesseract.image_to_string(img)
