@@ -1,20 +1,17 @@
 #libraries
 import cv2
-import pytesseract
-from PIL import Image
+
+
 
 
 #my files
 import FrameOps
 from diffFrame import *
 from FrameDiffTests import *
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
-
-#init object
-#frameOps = FrameOps()
+import ImgTools
 
 #video to survey
-vid = cv2.VideoCapture('hd1.mp4')
+vid = cv2.VideoCapture('slideShort.mp4')
 
 
 currentFrame, framesLeft = FrameOps.getNextFrame(vid, 20)
@@ -32,12 +29,5 @@ while framesLeft == True:
     
     currentFrame, framesLeft = FrameOps.getNextFrame(vid, 20)
 
-#img = cv2.imread("Capture2.png")
-
-#text = pytesseract.image_to_string(img)
-#print(text)
-
-#cv2.imshow('image', img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+ImgTools.ConvertToPdf(r'imgDump/slide')
 print("---done---")
