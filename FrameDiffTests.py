@@ -35,10 +35,9 @@ class FrameDiffTest:
         self.pastFrame = currentFrame
 
         currentVal = np.sum(currentFrameBW) // 10000
-        #preVal = np.sum(prevFrameBW) // 10000
         preVal = self.pastBWSum
         self.pastBWSum = currentVal
-        #print( str(currentVal) + "    "+str(preVal) + "     " + str( abs(currentVal-preVal)) )
+        
 
         #the constant value here is the tolerance to pick a slide to be save,  100 works well
         #too high you will miss slides, too low and you will get double ups

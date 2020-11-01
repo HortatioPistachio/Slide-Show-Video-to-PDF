@@ -6,7 +6,7 @@ import math
 def getNextFrame(vid, res):
     framesLeft = True
     for i in range(res):
-        ret, frame = vid.read()
+        ret = vid.grab()
         if ret == False:
             framesLeft = False
             break
