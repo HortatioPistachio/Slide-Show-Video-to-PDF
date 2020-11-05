@@ -7,7 +7,8 @@ import slideReader
 #changes to grab() frames that arnet needed
 #took 89 seconds
 
-#multithreaded the reading of frames,
+#multithreaded the reading of frames, most time is still spent in frame reader
+#about 10sec is the frame comparions
 #took 73 seconds, 
 
 profile = cProfile.Profile()

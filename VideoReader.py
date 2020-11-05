@@ -17,7 +17,7 @@ class VideoReader:
         self.res = res
 
         #may have to set a max size as not to destroy ram usage, depend of speed of other threads
-        self.frameQ = queue.Queue(maxsize=200)
+        self.frameQ = queue.Queue(maxsize=10)
 
         #initializing the thread
         self.thread = Thread(target=self.update, args=())
@@ -45,13 +45,13 @@ class VideoReader:
                         break
 
                 ret, frame = self.vid.read()
-                #print("adding frame")
+
                 self.frameQ.put(frame)
                 if ret == False:
                     self.framesLeft = False
             else:
                 print("sleeping")
-                time.sleep(0.01)
+                time.sleep(0.1)
         print("queueing complete")
 
     def getFrame(self):
@@ -62,10 +62,4 @@ class VideoReader:
     #loop checks to make sure there arent any more frames
     #one the way
     def frameLeft(self):
-        tries = 0
-
-        while self.frameQ.qsize() == 0 and not self.stopped and tries < 5:
-            time.sleep(0.01)
-            tries += 1
-
-        return self.frameQ.qsize()    
+        return self.framesLeft    
