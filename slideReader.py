@@ -11,11 +11,11 @@ def main():
 
     #video to survey
     #vid = cv2.VideoCapture('slideShort.mp4')
-    video = VideoReader("hd1.mp4",40)
+    video = VideoReader("hd1.mp4",40).start()
     
 
     #currentFrame, framesLeft = FrameOps.getNextFrame(vid, 40)
-    video.update()
+    
     currentFrame = video.getFrame()
     remainingFrames = video.frameLeft()
     

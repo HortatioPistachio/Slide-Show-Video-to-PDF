@@ -3,8 +3,12 @@ import pstats
 import slideReader
 #aight so base of most recent profile on a big one, reading the slides in takes 80% of the time
 #took  172 seconds
+
 #changes to grab() frames that arnet needed
 #took 89 seconds
+
+#multithreaded the reading of frames,
+#took 73 seconds, 
 
 profile = cProfile.Profile()
 profile.run('slideReader.main()')

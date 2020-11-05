@@ -2,6 +2,7 @@
 #i.e. res = 20 means every 20th frame is taken
 #based off imutils
 
+from threading import Thread
 import cv2
 import queue
 import threading
@@ -16,27 +17,42 @@ class VideoReader:
         self.res = res
 
         #may have to set a max size as not to destroy ram usage, depend of speed of other threads
-        self.frameQ = queue.Queue()
+        self.frameQ = queue.Queue(maxsize=200)
+
+        #initializing the thread
+        self.thread = Thread(target=self.update, args=())
+        #having the daemon means itll always run in the background like we want
+        self.thread.daemon = True
+
+    def start(self):
+        self.thread.start()
+        return self
 
 
     def update(self):
+        print("thread started")
         #infinitre loop to keep looping, we will break dependent on certain condiditons
         while (True):
-
-            #end loop if we are out of frames
-            if (self.framesLeft == False):
-                break
-
-            for i in range(self.res):
-                ret = self.vid.grab()
-                if ret == False:
-                    self.framesLeft = False
+            if (not self.frameQ.full()):
+                #end loop if we are out of frames
+                if (self.framesLeft == False):
                     break
 
-            ret, frame = self.vid.read()
-            self.frameQ.put(frame)
-            if ret == False:
-                self.framesLeft = False
+                for i in range(self.res):
+                    ret = self.vid.grab()
+                    if ret == False:
+                        self.framesLeft = False
+                        break
+
+                ret, frame = self.vid.read()
+                #print("adding frame")
+                self.frameQ.put(frame)
+                if ret == False:
+                    self.framesLeft = False
+            else:
+                print("sleeping")
+                time.sleep(0.01)
+        print("queueing complete")
 
     def getFrame(self):
         return self.frameQ.get()   
@@ -49,7 +65,7 @@ class VideoReader:
         tries = 0
 
         while self.frameQ.qsize() == 0 and not self.stopped and tries < 5:
-            time.sleep(0.1)
+            time.sleep(0.01)
             tries += 1
 
         return self.frameQ.qsize()    
