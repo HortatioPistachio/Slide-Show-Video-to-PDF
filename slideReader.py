@@ -10,9 +10,9 @@ from VideoReader import VideoReader
 def main():
 
     #video to survey
-
+    #fileName = input("Enter filename: ")
+    #video = VideoReader(fileName,40).start()
     video = VideoReader("hd1.mp4",40).start()
-    #video = VideoReader("slideShort.mp4",40).start()
     
 
     #currentFrame, framesLeft = FrameOps.getNextFrame(vid, 40)
@@ -24,10 +24,9 @@ def main():
     frameDiffTests = FrameDiffTest( currentFrame)
     count = 0
     while remainingFrames == True:
-        newFrame = frameDiffTests.sumTest(currentFrame)
 
-        if(np.sum(newFrame) != 0):
-            cv2.imwrite("imgDump/slide" +str(count) +".jpeg", newFrame)
+        if(frameDiffTests.test(currentFrame)):
+            cv2.imwrite("imgDump/slide" +str(count) +".jpeg", currentFrame)
             count = count+1
         
         currentFrame = video.getFrame()

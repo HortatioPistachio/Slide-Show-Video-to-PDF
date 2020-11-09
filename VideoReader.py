@@ -17,7 +17,7 @@ class VideoReader:
         self.res = res
 
         #may have to set a max size as not to destroy ram usage, depend of speed of other threads
-        self.frameQ = queue.Queue(maxsize=10)
+        self.frameQ = queue.Queue(maxsize=100)
 
         #initializing the thread
         self.thread = Thread(target=self.update, args=())
