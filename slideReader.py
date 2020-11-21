@@ -12,8 +12,8 @@ def main():
     #video to survey
     #fileName = input("Enter filename: ")
     #video = VideoReader(fileName,40).start()
-    video = VideoReader("hd1.mp4",40).start()
-    
+    video = VideoReader("seminarPreso.mp4",20).start()
+
 
     #currentFrame, framesLeft = FrameOps.getNextFrame(vid, 40)
     
@@ -21,8 +21,9 @@ def main():
     remainingFrames = video.frameLeft()
     
 
-    frameDiffTests = FrameDiffTest( currentFrame)
+    frameDiffTests = FrameDiffTest( currentFrame )
     count = 0
+    
     while remainingFrames == True:
 
         if(frameDiffTests.test(currentFrame)):

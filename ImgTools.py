@@ -16,5 +16,8 @@ def ConvertToPdf(path):
         images.append(im)
         os.remove(fname)
         counter = counter + 1
+    if (len(images) == 0):
+        raise Exception("image array is empty")
 
     images[0].save(r'Slides.pdf', save_all=True, append_images=images)
+

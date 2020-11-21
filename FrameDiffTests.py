@@ -10,6 +10,8 @@ class FrameDiffTest:
         self.pastBWSum = 0
         self.preFrameSums = [0, 0]
         self.tolerance = 100
+        self.testFrameHeight = 240
+        self.testFrameWidth = 320
 
     #this is the testing funciton, run this an itll run the test and return true if all pass
     #future plans is to be able to add certain types of test types
@@ -44,19 +46,20 @@ class FrameDiffTest:
 
     #this function converts to BW and then sum up all the pixels on the screen and then compare to the previous sum
     def sumTest(self, currentFrame):
-        currentFrame = FrameOps.cropFrame(currentFrame, "mid")
+        currentFrame = self.cropToStandard(currentFrame)
         currentFrameBW = cv2.cvtColor( currentFrame, cv2.COLOR_BGR2GRAY)
         #prevFrameBW = cv2.cvtColor( self.pastFrame, cv2.COLOR_BGR2GRAY)
 
         self.pastFrame = currentFrame
 
-        currentVal = np.sum(currentFrameBW) // 10000
+        currentVal = np.sum(currentFrameBW) // 1000
         preVal = self.pastBWSum
         self.pastBWSum = currentVal
         
 
-        #the constant value here is the tolerance to pick a slide to be save,  100 works well
+        #the constant value here is the tolerance to pick a slide to be save,  1000 works well
         #too high you will miss slides, too low and you will get double ups
+        print( abs(currentVal-preVal) )
         if(abs(currentVal-preVal) > self.tolerance):
             return currentFrame
         return self.blank()
@@ -68,12 +71,12 @@ class FrameDiffTest:
     #sorta works sort doesnt, not to sure why, still outputs 2 or 3 video slides in each rep
     def videoTest(self, currentFrame):
         #can be a bit looser on this test we are testing 3 difference frame and if any are the same we pass
-        currentFrame = FrameOps.cropFrame(currentFrame, "mid")
+        currentFrame = self.cropToStandard(currentFrame)
         localTolerance = 0.3*self.tolerance
         currentFrameBW = cv2.cvtColor( currentFrame, cv2.COLOR_BGR2GRAY)
 
         #this scaling may cause problems for different video sizes
-        currentVal = np.sum(currentFrameBW) // 10000
+        currentVal = np.sum(currentFrameBW) // 1000
 
         #test if sums are significantly differnt as expected in video
 
@@ -90,3 +93,6 @@ class FrameDiffTest:
             return False
         
         return True
+
+    def cropToStandard(self, currentFrame):
+        return FrameOps.cropFrame(currentFrame, "custom", self.testFrameWidth, self.testFrameHeight)
